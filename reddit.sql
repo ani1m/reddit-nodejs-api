@@ -1,4 +1,4 @@
--- This creates the users table. The username field is constrained to unique
+ -- This creates the users table. The username field is constrained to unique
 -- values only, by using a UNIQUE KEY on that column
 CREATE TABLE `users` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
@@ -22,4 +22,15 @@ CREATE TABLE `posts` (
   PRIMARY KEY (`id`),
   KEY `userId` (`userId`), -- why did we add this here? ask me :)
   CONSTRAINT `posts_ibfk_1` FOREIGN KEY (`userId`) REFERENCES `users` (`id`) ON DELETE SET NULL
+);
+
+-- My subreddit table --
+CREATE TABLE `subreddit` (
+`id` int(11) NOT NULL AUTO_INCREMENT,
+`name` varchar(30) NOT NULL,
+`description` varchar(200),
+`createdAt` DATETIME NOT NULL,
+`updatedAt` DATETIME NOT NULL,
+PRIMARY KEY('id'),
+UNIQUE ('name')
 );

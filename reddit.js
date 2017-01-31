@@ -4,7 +4,7 @@ var HASH_ROUNDS = 10;
 module.exports = function RedditAPI(conn) {
   return {
     createUser: function(user, callback) {
-      
+
       // first we have to hash the password...
       bcrypt.hash(user.password, HASH_ROUNDS, function(err, hashedPassword) {
         if (err) {
@@ -48,7 +48,7 @@ module.exports = function RedditAPI(conn) {
                       3b. If the insert succeeds, re-fetch the user from the DB
                       4. If the re-fetch succeeds, return the object to the caller
                       */
-                        callback(null, result[0]);
+                      callback(null, result[0]);
                     }
                   }
                 );
@@ -93,19 +93,39 @@ module.exports = function RedditAPI(conn) {
       }
       var limit = options.numPerPage || 25; // if options.numPerPage is "falsy" then use 25
       var offset = (options.page || 0) * limit;
-      
+
       conn.query(`
-        SELECT id, title, url, userId, createdAt, updatedAt
+        SELECT posts.id, posts.title, 
+                posts.url, posts.userId, 
+                posts.createdAt, posts.updatedAt, 
+        users.id AS usersId, users.username AS usersUsername, users.createdAt AS usersCreatedAt, users.updatedAt AS usersUpdatedAt
         FROM posts
-        ORDER BY createdAt DESC
-        LIMIT ? OFFSET ?`
-        , [limit, offset],
+        JOIN users
+        ON users.id = posts.userId
+        ORDER BY posts.createdAt DESC
+        LIMIT ? OFFSET ?`, [limit, offset],
         function(err, results) {
           if (err) {
             callback(err);
           }
           else {
-            callback(null, results);
+            callback(null, results.map(function(list) {
+              return ({
+                id: list.id,
+                title: list.title,
+                url: list.url,
+                createdAt: list.createdAt,
+                updatedAt: list.updatedAt,
+                userId: list.userId,
+                user: {
+                  id: list.usersId,
+                  username: list.usersUsername,
+                  createdAt: list.usersCreatedAt,
+                  updatedAt: list.usersUpdatedAt
+                }
+              })
+            }));
+            results; // function to filter through the array
           }
         }
       );
