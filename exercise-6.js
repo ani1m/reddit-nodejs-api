@@ -70,7 +70,6 @@ app.post(`/createContent`, function(req, res) {
 
     // option 3
         res.redirect(`/posts`) 
-        
     app.get(`/posts`, function(req, res) {
   redditAPI.getAllPosts(function(err, response) {
     if (err) {

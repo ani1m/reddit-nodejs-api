@@ -14,12 +14,11 @@ var reddit = require('./reddit');
 var redditAPI = reddit(connection);
 
 
-
-
 app.get(`/posts`, function(req, res) {
   redditAPI.getAllPosts(function(err, response) {
     if (err) {
       res.send(err)
+      
     }
     else {
       response.length = 5;
@@ -45,6 +44,7 @@ app.get(`/posts`, function(req, res) {
 
     res.send(output);
   })
+
 
 });
 
