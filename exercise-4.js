@@ -39,35 +39,14 @@ app.get(`/posts`, function(req, res) {
 
       });
 
-
-
-
     }
 
-
-
-
-
-
-
     output += '</ul>';
-
-
-
-
-
-
 
     res.send(output);
   })
 
-
-
-
 });
-
-
-
 
 
 /* YOU DON'T HAVE TO CHANGE ANYTHING BELOW THIS LINE :) */

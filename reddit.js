@@ -75,6 +75,7 @@ module.exports = function RedditAPI(conn) {
               function(err, result) {
                 if (err) {
                   callback(err);
+                 
                 }
                 else {
                   callback(null, result[0]);
