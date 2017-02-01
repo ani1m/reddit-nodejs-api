@@ -30,10 +30,17 @@ var server = app.listen(process.env.PORT, process.env.IP, function() {
 */
 
 // Exercise 7 part 9
-
+const pug = require('pug');
 var express = require('express');
 var app = express();
 var mysql = require('mysql');
+var bodyParser = require('body-parser')
+
+app.set('view engine', 'pug');
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
+
 
 var connection = mysql.createConnection({
   host: 'localhost',
@@ -55,29 +62,16 @@ app.get(`/posts`, function(req, res) {
       res.send(err)
     }
     else {
-      response.length = 5;
-      var output = "";
-      output += '<h1> List of contents </h1>'
-      output += '<ul>';
-
-      response.forEach(function(element) {
-
-        output += '<li>';
-        output += '<a href="' + element.url + '">'
-        output += element.title;
-        output += '</a>'
-        output += '<span>' + element.user.username + '</span>'
-        output += '<span>' + element.user.createdAt + '</span>'
-        output += '</li>';
+      response = response.slice(0,5);
+      res.render('post-list', {
+        posts: response
+        
 
       });
 
-    }
+    };
 
-    output += '</ul>';
-
-    res.send(output);
-  })
+  });
 
 });
 
